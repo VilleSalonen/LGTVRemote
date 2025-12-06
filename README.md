@@ -1,12 +1,20 @@
 # LG TV Remote
 
+LG TVs have an annoying issue where disconnecting a device's HDMI cable resets the input type and the label. Setting these manually via painfully slow Home Dashboard view is not the greatest user experience.
+
+Tested with LG CX 48".
+
+Usage:
+
+    node remote.js <IP> <command> [args...]
+
 Switch input:
 
-    node remote.js switch HDMI_1
+    node remote.js 10.0.3.1 switch HDMI_1
 
 Set input types and labels:
 
-    node remote.js key HOME PAUSE_1000 NOOP_"Open Home" \
+    node remote.js 10.0.3.1 key HOME PAUSE_1000 NOOP_"Open Home" \
         DOWN PAUSE_1000 ENTER PAUSE_3000 NOOP_"Open Home Dashboard" \
         UP_7 RIGHT_3 LEFT_2 ENTER PAUSE_1000 NOOP_"Open Settings dropdown" \
         DOWN ENTER PAUSE_1000 NOOP_"Edit settings" \

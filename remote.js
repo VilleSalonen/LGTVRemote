@@ -1,9 +1,16 @@
 import { LGTV, Keys } from './src/lgtv.js';
 
-const tv = new LGTV('10.0.3.1');
+const ip = process.argv[2];
+const command = process.argv[3];
+const args = process.argv.slice(4);
 
-const command = process.argv[2];
-const args = process.argv.slice(3);
+if (!ip || !command) {
+  console.log('Usage: node remote.js <IP> <command> [args...]');
+  console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys, type <text>, delete [count], toast <msg>');
+  process.exit(1);
+}
+
+const tv = new LGTV(ip);
 
 console.log('Connecting to TV...');
 
@@ -28,7 +35,7 @@ try {
 
     case 'switch':
       if (!args[0]) {
-        console.error('Usage: node test.js switch <HDMI_1|HDMI_2|HDMI_3|HDMI_4>');
+        console.error('Usage: node remote.js <IP> switch <HDMI_1|HDMI_2|HDMI_3|HDMI_4>');
         break;
       }
       console.log(`Switching to ${args[0]}...`);
@@ -48,7 +55,7 @@ try {
 
     case 'key':
       if (args.length === 0) {
-        console.error('Usage: node remote.js key <KEY> [KEY2] [PAUSE_500] [TEXT_hello] ...');
+        console.error('Usage: node remote.js <IP> key <KEY> [KEY2] [PAUSE_500] [TEXT_hello] ...');
         console.log('Available keys:', Object.keys(Keys).join(', '));
         console.log('Special commands:');
         console.log('  KEY_N     - repeat key N times (e.g., DOWN_9, LEFT_3)');
@@ -111,7 +118,7 @@ try {
 
     case 'type':
       if (args.length === 0) {
-        console.error('Usage: node test.js type <text>');
+        console.error('Usage: node remote.js <IP> type <text>');
         break;
       }
       const text = args.join(' ');
@@ -127,7 +134,7 @@ try {
 
     case 'toast':
       if (args.length === 0) {
-        console.error('Usage: node test.js toast <message>');
+        console.error('Usage: node remote.js <IP> toast <message>');
         break;
       }
       const msg = args.join(' ');
@@ -136,6 +143,7 @@ try {
       break;
 
     default:
+      console.log('Usage: node remote.js <IP> <command> [args...]');
       console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys, type <text>, delete [count], toast <msg>');
   }
 
