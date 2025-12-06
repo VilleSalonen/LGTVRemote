@@ -1,0 +1,24 @@
+{
+  "name": "lgtv-remote",
+  "version": "1.0.0",
+  "description": "Node.js CLI tool to control LG WebOS TVs via SSAP protocol",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "lgtv": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js"
+  },
+  "keywords": [
+    "lgtv",
+    "webos",
+    "ssap",
+    "remote",
+    "hdmi"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}
