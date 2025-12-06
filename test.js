@@ -54,14 +54,20 @@ try {
         console.log('  PAUSE_X   - wait X milliseconds (e.g., PAUSE_500)');
         console.log('  TEXT_abc  - type text (e.g., TEXT_hello or TEXT_"hello world")');
         console.log('  DELETE_X  - delete X characters (e.g., DELETE_5)');
+        console.log('  NOOP_...  - comment, ignored (e.g., NOOP_"open settings")');
         break;
       }
       for (const arg of args) {
         const pauseMatch = arg.match(/^PAUSE_(\d+)$/i);
         const textMatch = arg.match(/^TEXT_(.+)$/i);
         const deleteMatch = arg.match(/^DELETE_(\d+)$/i);
+        const noopMatch = arg.match(/^NOOP_(.*)$/i);
 
-        if (pauseMatch) {
+        if (noopMatch) {
+          // Comment - do nothing, just log
+          const comment = noopMatch[1].replace(/^["']|["']$/g, '');
+          console.log(`# ${comment}`);
+        } else if (pauseMatch) {
           const ms = parseInt(pauseMatch[1], 10);
           console.log(`Pausing ${ms}ms...`);
           await new Promise(r => setTimeout(r, ms));
