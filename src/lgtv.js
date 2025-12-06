@@ -5,7 +5,7 @@ import { join } from 'path';
 
 const CONFIG_PATH = join(homedir(), '.lgtv-remote.json');
 
-// Handshake payload for initial pairing
+// Handshake payload for initial pairing (from lgtv2 library)
 const HANDSHAKE_PAYLOAD = {
   forcePairing: false,
   pairingType: 'PROMPT',
@@ -17,9 +17,9 @@ const HANDSHAKE_PAYLOAD = {
       appId: 'com.lge.test',
       vendorId: 'com.lge',
       localizedAppNames: {
-        '': 'LG Remote',
-        'ko-KR': 'LG Remote',
-        'zxx-XX': 'LG Remote'
+        '': 'LG Remote App',
+        'ko-KR': '리모컨 앱',
+        'zxx-XX': 'ЛГ Rэмotэ AПП'
       },
       localizedVendorNames: {
         '': 'LG Electronics'
@@ -66,12 +66,42 @@ const HANDSHAKE_PAYLOAD = {
       'READ_TV_CHANNEL_LIST',
       'WRITE_NOTIFICATION_TOAST',
       'READ_POWER_STATE',
-      'READ_COUNTRY_INFO'
+      'READ_COUNTRY_INFO',
+      'READ_SETTINGS',
+      'CONTROL_TV_SCREEN',
+      'CONTROL_TV_STANBY',
+      'CONTROL_FAVORITE_GROUP',
+      'CONTROL_USER_INFO',
+      'CHECK_BLUETOOTH_DEVICE',
+      'CONTROL_BLUETOOTH',
+      'CONTROL_TIMER_INFO',
+      'STB_INTERNAL_CONNECTION',
+      'CONTROL_RECORDING',
+      'READ_RECORDING_STATE',
+      'WRITE_RECORDING_LIST',
+      'READ_RECORDING_LIST',
+      'READ_RECORDING_SCHEDULE',
+      'WRITE_RECORDING_SCHEDULE',
+      'READ_STORAGE_DEVICE_LIST',
+      'READ_TV_PROGRAM_INFO',
+      'CONTROL_BOX_CHANNEL',
+      'READ_TV_ACR_AUTH_TOKEN',
+      'READ_TV_CONTENT_STATE',
+      'READ_TV_CURRENT_TIME',
+      'ADD_LAUNCHER_CHANNEL',
+      'SET_CHANNEL_SKIP',
+      'RELEASE_CHANNEL_SKIP',
+      'CONTROL_CHANNEL_BLOCK',
+      'DELETE_SELECT_CHANNEL',
+      'CONTROL_CHANNEL_GROUP',
+      'SCAN_TV_CHANNELS',
+      'CONTROL_TV_POWER',
+      'CONTROL_WOL'
     ],
     signatures: [
       {
         signatureVersion: 1,
-        signature: 'eyJhbGdvcml0aG0iOiJSU0EtU0hBMjU2Iiwia2V5SWQiOiJ0ZXN0LXNpZ25pbmctY2VydCIsInNpZ25hdHVyZVZlcnNpb24iOjF9.hrVRgjCwXVvE2OOSpDZ58hR+59aFNwYDyjQgKk3auukd7pcegmE2CzPCa0bJ0ZsRAcKkCTJrWo5iDzNhMBWRyaMOv5zWSrthlf7G128qvIlpMT0YNY+n/FaOHE73uLrS/g7swl3/qH/BGFG2Hu4RlL48eb3lLKqTt2xKHdCs6Cd4RMfJPYnzgvI4BNrFUKsjkcu+WD4OO2A27Pq1n50cMchmcaXadJhGrOqH5LALBgSz5rXagn5dGd9n2lLHE4Rh5m++PqhD5bFnfgiJMzqeKVLMS9TQYwK43P9zP7xwNs6ioNmLDfCmfqJmixBnLWTtK3IeSs5EHKzFaxzLatA='
+        signature: 'eyJhbGdvcml0aG0iOiJSU0EtU0hBMjU2Iiwia2V5SWQiOiJ0ZXN0LXNpZ25pbmctY2VydCIsInNpZ25hdHVyZVZlcnNpb24iOjF9.hrVRgjCwXVvE2OOSpDZ58hR+59aFNwYDyjQgKk3auukd7pcegmE2CzPCa0bJ0ZsRAcKkCTJrWo5iDzNhMBWRyaMOv5zWSrthlf7G128qvIlpMT0YNY+n/FaOHE73uLrS/g7swl3/qH/BGFG2Hu4RlL48eb3lLKqTt2xKHdCs6Cd4RMfJPYnzgvI4BNrFUKsjkcu+WD4OO2A27Pq1n50cMchmcaXadJhGrOqH5YmHdOCj5NSHzJYrsW0HPlpuAx/ECMeIZYDh6RMqaFM2DXzdKX9NmmyqzJ3o/0lkk/N97gfVRLW5hA29yeAwaCViZNCP8iC9aO0q9fQojoa7NQnAtw=='
       }
     ]
   }
@@ -121,12 +151,69 @@ export const SSAP = {
   CREATE_TOAST: 'ssap://system.notifications/createToast'
 };
 
+// Remote control key codes
+export const Keys = {
+  // Navigation
+  UP: 'UP',
+  DOWN: 'DOWN',
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT',
+  ENTER: 'ENTER',
+  BACK: 'BACK',
+  HOME: 'HOME',
+  EXIT: 'EXIT',
+
+  // Media
+  PLAY: 'PLAY',
+  PAUSE: 'PAUSE',
+  STOP: 'STOP',
+  REWIND: 'REWIND',
+  FASTFORWARD: 'FASTFORWARD',
+
+  // Volume
+  VOLUMEUP: 'VOLUMEUP',
+  VOLUMEDOWN: 'VOLUMEDOWN',
+  MUTE: 'MUTE',
+
+  // Channels
+  CHANNELUP: 'CHANNELUP',
+  CHANNELDOWN: 'CHANNELDOWN',
+
+  // Numbers
+  NUM_0: '0',
+  NUM_1: '1',
+  NUM_2: '2',
+  NUM_3: '3',
+  NUM_4: '4',
+  NUM_5: '5',
+  NUM_6: '6',
+  NUM_7: '7',
+  NUM_8: '8',
+  NUM_9: '9',
+
+  // Colors
+  RED: 'RED',
+  GREEN: 'GREEN',
+  YELLOW: 'YELLOW',
+  BLUE: 'BLUE',
+
+  // Other
+  MENU: 'MENU',
+  INFO: 'INFO',
+  QMENU: 'QMENU',
+  POWER: 'POWER',
+  CC: 'CC',
+  DASH: 'DASH',
+  ASTERISK: 'ASTERISK'
+};
+
 export class LGTV {
   constructor(ip, options = {}) {
     this.ip = ip;
     this.port = options.port || 3001;
     this.secure = options.secure !== false; // Default to secure (wss)
     this.ws = null;
+    this.pointerSocket = null;
     this.clientKey = null;
     this.commandId = 0;
     this.callbacks = new Map();
@@ -257,12 +344,71 @@ export class LGTV {
   }
 
   disconnect() {
+    if (this.pointerSocket) {
+      this.pointerSocket.close();
+      this.pointerSocket = null;
+    }
     if (this.ws) {
       this.ws.close();
       this.ws = null;
     }
     this.connected = false;
     this.handshakeComplete = false;
+  }
+
+  async getPointerSocket() {
+    const result = await this.sendCommand(SSAP.GET_POINTER_SOCKET);
+    return result.socketPath;
+  }
+
+  async connectPointer() {
+    if (this.pointerSocket) return;
+
+    const socketPath = await this.getPointerSocket();
+
+    return new Promise((resolve, reject) => {
+      this.pointerSocket = new WebSocket(socketPath, {
+        rejectUnauthorized: false
+      });
+
+      this.pointerSocket.on('open', () => resolve());
+      this.pointerSocket.on('error', (err) => reject(err));
+    });
+  }
+
+  async sendKey(key) {
+    if (!this.pointerSocket) {
+      await this.connectPointer();
+    }
+
+    const message = `type:button\nname:${key}\n\n`;
+    this.pointerSocket.send(message);
+  }
+
+  async sendClick() {
+    if (!this.pointerSocket) {
+      await this.connectPointer();
+    }
+
+    this.pointerSocket.send('type:click\n\n');
+  }
+
+  async moveMouse(dx, dy, drag = false) {
+    if (!this.pointerSocket) {
+      await this.connectPointer();
+    }
+
+    const message = `type:move\ndx:${dx}\ndy:${dy}\ndown:${drag ? 1 : 0}\n\n`;
+    this.pointerSocket.send(message);
+  }
+
+  async scroll(dx, dy) {
+    if (!this.pointerSocket) {
+      await this.connectPointer();
+    }
+
+    const message = `type:scroll\ndx:${dx}\ndy:${dy}\n\n`;
+    this.pointerSocket.send(message);
   }
 
   // Input Management

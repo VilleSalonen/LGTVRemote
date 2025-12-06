@@ -1,4 +1,4 @@
-import { LGTV } from './src/lgtv.js';
+import { LGTV, Keys } from './src/lgtv.js';
 
 const tv = new LGTV('10.0.3.1');
 
@@ -46,8 +46,28 @@ try {
       console.log('Volume:', vol);
       break;
 
+    case 'key':
+      if (!arg) {
+        console.error('Usage: node test.js key <KEY>');
+        console.log('Available keys:', Object.keys(Keys).join(', '));
+        break;
+      }
+      console.log(`Sending key: ${arg}`);
+      await tv.sendKey(arg.toUpperCase());
+      await new Promise(r => setTimeout(r, 100)); // Brief delay for key to register
+      break;
+
+    case 'keys':
+      console.log('Available keys:', Object.keys(Keys).join(', '));
+      break;
+
+    case 'pointer-debug':
+      const socketPath = await tv.getPointerSocket();
+      console.log('Pointer socket path:', socketPath);
+      break;
+
     default:
-      console.log('Commands: inputs, inputs-raw, switch <input>, info, volume');
+      console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys');
   }
 
   tv.disconnect();
