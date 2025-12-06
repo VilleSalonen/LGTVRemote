@@ -48,9 +48,10 @@ try {
 
     case 'key':
       if (args.length === 0) {
-        console.error('Usage: node test.js key <KEY> [KEY2] [PAUSE_500] [TEXT_hello] ...');
+        console.error('Usage: node remote.js key <KEY> [KEY2] [PAUSE_500] [TEXT_hello] ...');
         console.log('Available keys:', Object.keys(Keys).join(', '));
         console.log('Special commands:');
+        console.log('  KEY_N     - repeat key N times (e.g., DOWN_9, LEFT_3)');
         console.log('  PAUSE_X   - wait X milliseconds (e.g., PAUSE_500)');
         console.log('  TEXT_abc  - type text (e.g., TEXT_hello or TEXT_"hello world")');
         console.log('  DELETE_X  - delete X characters (e.g., DELETE_5)');
@@ -62,6 +63,7 @@ try {
         const textMatch = arg.match(/^TEXT_(.+)$/i);
         const deleteMatch = arg.match(/^DELETE_(\d+)$/i);
         const noopMatch = arg.match(/^NOOP_(.*)$/i);
+        const repeatMatch = arg.match(/^([A-Z]+)_(\d+)$/i);
 
         if (noopMatch) {
           // Comment - do nothing, just log
@@ -81,6 +83,15 @@ try {
           console.log(`Deleting ${delCount} character(s)`);
           await tv.deleteCharacters(delCount);
           await new Promise(r => setTimeout(r, 150));
+        } else if (repeatMatch && Keys[repeatMatch[1].toUpperCase()]) {
+          // Key with repeat count (e.g., DOWN_9)
+          const keyName = repeatMatch[1].toUpperCase();
+          const count = parseInt(repeatMatch[2], 10);
+          console.log(`Sending key: ${keyName} x${count}`);
+          for (let i = 0; i < count; i++) {
+            await tv.sendKey(keyName);
+            await new Promise(r => setTimeout(r, 150));
+          }
         } else {
           console.log(`Sending key: ${arg}`);
           await tv.sendKey(arg.toUpperCase());
