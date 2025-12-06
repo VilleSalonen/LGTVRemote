@@ -147,6 +147,10 @@ export const SSAP = {
   // Pointer/Input
   GET_POINTER_SOCKET: 'ssap://com.webos.service.networkinput/getPointerInputSocket',
 
+  // Text Input (IME)
+  INSERT_TEXT: 'ssap://com.webos.service.ime/insertText',
+  DELETE_CHARACTERS: 'ssap://com.webos.service.ime/deleteCharacters',
+
   // Notifications
   CREATE_TOAST: 'ssap://system.notifications/createToast'
 };
@@ -478,6 +482,15 @@ export class LGTV {
 
   async stop() {
     return this.sendCommand(SSAP.STOP);
+  }
+
+  // Text Input (IME)
+  async insertText(text, replace = false) {
+    return this.sendCommand(SSAP.INSERT_TEXT, { text, replace });
+  }
+
+  async deleteCharacters(count) {
+    return this.sendCommand(SSAP.DELETE_CHARACTERS, { count });
   }
 
   // Notifications
