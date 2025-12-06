@@ -21,6 +21,11 @@ try {
       }
       break;
 
+    case 'inputs-raw':
+      const inputsRaw = await tv.getInputList();
+      console.log(JSON.stringify(inputsRaw, null, 2));
+      break;
+
     case 'switch':
       if (!arg) {
         console.error('Usage: node test.js switch <HDMI_1|HDMI_2|HDMI_3|HDMI_4>');
@@ -42,7 +47,7 @@ try {
       break;
 
     default:
-      console.log('Commands: inputs, switch <input>, info, volume');
+      console.log('Commands: inputs, inputs-raw, switch <input>, info, volume');
   }
 
   tv.disconnect();
