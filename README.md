@@ -28,3 +28,11 @@ Set input types and labels:
         RIGHT ENTER PAUSE_1000 DELETE_100 PAUSE_1000 TEXT_"MacBook Pro" DOWN_3 PAUSE_1000 NOOP_"Set HDMI_4 label" \
         BACK RIGHT ENTER PAUSE_1000 NOOP_"Save settings" \
         RIGHT_2 ENTER NOOP_"Exit Home Dashboard"
+
+## Credits
+
+Based on the SSAP protocol implementation from [lgtv2](https://github.com/hobbyquaker/lgtv2).
+
+## License
+
+MIT
