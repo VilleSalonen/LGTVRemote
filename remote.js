@@ -6,7 +6,7 @@ const args = process.argv.slice(4);
 
 if (!ip || !command) {
   console.log('Usage: node remote.js <IP> <command> [args...]');
-  console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys, type <text>, delete [count], toast <msg>');
+  console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys, type <text>, delete [count], toast <msg>, play, pause, stop, off');
   process.exit(1);
 }
 
@@ -177,9 +177,29 @@ try {
       await tv.showToast(msg);
       break;
 
+    case 'play':
+      console.log('Sending play command...');
+      await tv.play();
+      break;
+
+    case 'pause':
+      console.log('Sending pause command...');
+      await tv.pause();
+      break;
+
+    case 'stop':
+      console.log('Sending stop command...');
+      await tv.stop();
+      break;
+
+    case 'off':
+      console.log('Turning off TV...');
+      await tv.turnOff();
+      break;
+
     default:
       console.log('Usage: node remote.js <IP> <command> [args...]');
-      console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys, type <text>, delete [count], toast <msg>');
+      console.log('Commands: inputs, inputs-raw, switch <input>, info, volume, key <KEY>, keys, type <text>, delete [count], toast <msg>, play, pause, stop, off');
   }
 
   tv.disconnect();
