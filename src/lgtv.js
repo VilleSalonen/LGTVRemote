@@ -235,7 +235,10 @@ export class LGTV {
         this.clientKey = config.clientKey;
       }
     } catch (err) {
-      // Config doesn't exist or is invalid
+      // Log errors other than missing/invalid JSON (which are expected on first run)
+      if (err.code !== 'ENOENT') {
+        console.error('Warning: Failed to load config:', err.message);
+      }
     }
   }
 
