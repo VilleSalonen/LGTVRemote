@@ -411,7 +411,16 @@ export class LGTV {
   }
 
   async connectPointer() {
-    if (this.pointerSocket) return;
+    // Check if already connected and socket is open
+    if (this.pointerSocket && this.pointerSocket.readyState === WebSocket.OPEN) {
+      return;
+    }
+
+    // Close existing socket if it exists but isn't open
+    if (this.pointerSocket) {
+      this.pointerSocket.close();
+      this.pointerSocket = null;
+    }
 
     const socketPath = await this.getPointerSocket();
 
