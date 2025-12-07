@@ -401,6 +401,9 @@ export class LGTV {
 
   async getPointerSocket() {
     const result = await this.sendCommand(SSAP.GET_POINTER_SOCKET);
+    if (!result || !result.socketPath) {
+      throw new Error('Failed to get pointer socket path from TV');
+    }
     return result.socketPath;
   }
 
