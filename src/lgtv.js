@@ -216,6 +216,7 @@ export class LGTV {
     this.ip = ip;
     this.port = options.port || 3001;
     this.secure = options.secure !== false; // Default to secure (wss)
+    this.connectionTimeout = options.connectionTimeout || 10000; // 10 second default
     this.ws = null;
     this.pointerSocket = null;
     this.clientKey = null;
@@ -251,8 +252,46 @@ export class LGTV {
       const protocol = this.secure ? 'wss' : 'ws';
       const url = `${protocol}://${this.ip}:${this.port}`;
 
+      let timeoutId = null;
+      let settled = false;
+
+      const cleanup = () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+      };
+
+      const resolveOnce = () => {
+        if (!settled) {
+          settled = true;
+          cleanup();
+          resolve();
+        }
+      };
+
+      const rejectOnce = (err) => {
+        if (!settled) {
+          settled = true;
+          cleanup();
+          reject(err);
+        }
+      };
+
+      // Set connection timeout
+      timeoutId = setTimeout(() => {
+        if (!settled) {
+          if (this.ws) {
+            this.ws.close();
+          }
+          rejectOnce(new Error(`Connection timeout after ${this.connectionTimeout}ms`));
+        }
+      }, this.connectionTimeout);
+
+      // LG TVs use self-signed certificates, so we must disable certificate validation.
+      // This is expected and safe for local network communication with the TV.
       this.ws = new WebSocket(url, {
-        rejectUnauthorized: false // LG TVs use self-signed certs
+        rejectUnauthorized: false
       });
 
       this.ws.on('open', () => {
@@ -261,11 +300,11 @@ export class LGTV {
       });
 
       this.ws.on('message', (data) => {
-        this.handleMessage(data.toString(), resolve, reject);
+        this.handleMessage(data.toString(), resolveOnce, rejectOnce);
       });
 
       this.ws.on('error', (err) => {
-        reject(new Error(`WebSocket error: ${err.message}`));
+        rejectOnce(new Error(`WebSocket error: ${err.message}`));
       });
 
       this.ws.on('close', () => {
