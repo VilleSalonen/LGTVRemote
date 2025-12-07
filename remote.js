@@ -95,6 +95,11 @@ try {
           console.log(`# ${comment}`);
         } else if (pauseMatch) {
           const ms = parseInt(pauseMatch[1], 10);
+          const maxPause = 60000; // 1 minute max
+          if (ms > maxPause) {
+            console.error(`Error: PAUSE value ${ms}ms exceeds maximum of ${maxPause}ms`);
+            continue;
+          }
           console.log(`Pausing ${ms}ms...`);
           await new Promise(r => setTimeout(r, ms));
         } else if (textMatch) {
@@ -115,6 +120,15 @@ try {
           // Key with repeat count (e.g., DOWN_9)
           const keyName = repeatMatch[1].toUpperCase();
           const count = parseInt(repeatMatch[2], 10);
+          const maxRepeat = 100;
+          if (count > maxRepeat) {
+            console.error(`Error: Repeat count ${count} exceeds maximum of ${maxRepeat}`);
+            continue;
+          }
+          if (count < 1) {
+            console.error('Error: Repeat count must be at least 1');
+            continue;
+          }
           console.log(`Sending key: ${keyName} x${count}`);
           for (let i = 0; i < count; i++) {
             await tv.sendKey(keyName);
