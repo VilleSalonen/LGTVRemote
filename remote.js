@@ -10,6 +10,15 @@ if (!ip || !command) {
   process.exit(1);
 }
 
+// Validate IP address format (IPv4, IPv6, or hostname)
+const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+const ipv6Regex = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$|^\[([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}\]$/;
+const hostnameRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/;
+if (!ipv4Regex.test(ip) && !ipv6Regex.test(ip) && !hostnameRegex.test(ip)) {
+  console.error(`Error: Invalid IP address or hostname: ${ip}`);
+  process.exit(1);
+}
+
 const tv = new LGTV(ip);
 
 console.log('Connecting to TV...');
