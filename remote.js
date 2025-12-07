@@ -76,21 +76,33 @@ try {
       }
       for (const arg of args) {
         const pauseMatch = arg.match(/^PAUSE_(\d+)$/i);
-        const textMatch = arg.match(/^TEXT_(.+)$/i);
+        const textMatch = arg.match(/^TEXT_(.*)$/i);
         const deleteMatch = arg.match(/^DELETE_(\d+)$/i);
         const noopMatch = arg.match(/^NOOP_(.*)$/i);
         const repeatMatch = arg.match(/^([A-Z]+)_(\d+)$/i);
 
+        // Helper to strip matching quotes from both ends
+        const stripQuotes = (s) => {
+          if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
+            return s.slice(1, -1);
+          }
+          return s;
+        };
+
         if (noopMatch) {
           // Comment - do nothing, just log
-          const comment = noopMatch[1].replace(/^["']|["']$/g, '');
+          const comment = stripQuotes(noopMatch[1]);
           console.log(`# ${comment}`);
         } else if (pauseMatch) {
           const ms = parseInt(pauseMatch[1], 10);
           console.log(`Pausing ${ms}ms...`);
           await new Promise(r => setTimeout(r, ms));
         } else if (textMatch) {
-          const inputText = textMatch[1].replace(/^["']|["']$/g, ''); // Strip quotes
+          const inputText = stripQuotes(textMatch[1]);
+          if (inputText === '') {
+            console.error('Error: TEXT_ requires text to type (e.g., TEXT_hello)');
+            continue;
+          }
           console.log(`Typing: ${inputText}`);
           await tv.insertText(inputText);
           await new Promise(r => setTimeout(r, 150));
